@@ -18,12 +18,15 @@ height = 400
 
 
 barChartData = {
-  // 1
+  // 1. map date to x-position
+  // get min and max of date
   let extent = d3.extent(data, d => d.date);
   let xScale = d3.scaleTime()
     .domain(extent)
     .range([0, width]);
-  // 2
+
+  // 2. map high temp to y position
+  // get min/max of high temp
   // const yExtent = d3.extent(data, d => d.high);
   let [min, max] = d3.extent(data, d => d.high);
   let yScale = d3.scaleLinear()
@@ -31,12 +34,20 @@ barChartData = {
     .domain([Math.min(min,0), max])
     .range([height, 0]);
 
+  // extra! map average temperature to color
+  // get min/max of avg
+  const colorExtent = d3.extent(data, d => d.avg).reverse()
+  const colorScale = d3.scaleSequential()
+    .domain(colorExtent)
+    .interpolator(d3.interpolateRdYlBu)
+
   // array of objects: x, y, height
   return data.map(d => {
     return {
       x: xScale(d.date),
       y: yScale(d.high),
-      height: yScale(d.low) - yScale(d.high)
+      height: yScale(d.low) - yScale(d.high),
+      fill: colorScale(d.avg),
     }
   })
 }
