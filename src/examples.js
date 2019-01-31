@@ -19,14 +19,16 @@ height = 400
 
 barChartData = {
   // 1
-  var extent = d3.extent(data, d => d.date);
-  var xScale = d3.scaleTime()
+  let extent = d3.extent(data, d => d.date);
+  let xScale = d3.scaleTime()
     .domain(extent)
     .range([0, width]);
   // 2
-  const yExtent = d3.extent(data, d => d.high);
-  var yScale = d3.scaleLinear()
-    .domain(yExtent)
+  // const yExtent = d3.extent(data, d => d.high);
+  let [min, max] = d3.extent(data, d => d.high);
+  let yScale = d3.scaleLinear()
+    //.domain(extent)
+    .domain([Math.min(min,0), max])
     .range([height, 0]);
 
   // array of objects: x, y, height
