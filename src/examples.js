@@ -61,10 +61,6 @@ barChartData = {
 // Use a line generator to generate a string for the d attribute of a path
 // Return an array of two objects, one for the high temp path and the other for low temp path
 
-lineChartData = Array(2) [
-  0: Object {path: "M0,215.05376344086022L1.7857142857142858,223.65591…857142857,193.5483870967742L650,202.1505376344086", fill: "red"}
-  1: Object {path: "M0,249.46236559139786L1.7857142857142858,258.06451…7142857,262.36559139784947L650,253.76344086021504", fill: "blue"}
-]
 
 lineChartData = {
   let xExtent = d3.extent(data, d => d.date);
@@ -82,10 +78,52 @@ lineChartData = {
   var line = d3.line().x(d => xScale(d.date))
   // can do 2 line generators with both .x and .y
   // or use same var and call with .y in return (below)
-    
+
 
   return [
     {path: line.y(d => yScale(d.high))(data), fill: 'red'},
     {path: line.y(d => yScale(d.low))(data), fill: 'blue'},
   ]
+}
+
+
+
+
+
+// Create a radial chart with D3 arc
+// Use a linear scale to map temperature to radius
+// Use an arc generator to generate a string for the d attribute of a path, where:
+// startAngle: date
+// endAngle: date + 1
+// innerRadius: low temp
+// outerRadius: high temp
+// Return an array of objects, where each object has the d attribute to draw a path in the shape of a slice
+
+radialChartData = {
+  let radiusScale = d3.scaleLinear()
+    .domain([
+      d3.min(data, d => d.low),
+      d3.max(data, d => d.high),
+      ])
+    .range([0, width/2]);
+
+  let colorScale = d3.scaleSequential()
+    .domain(d3.extent(data, d => d.avg).reverse())
+    .interpolator(d3.interpolateRdYlBu)
+
+  // get the angle for each slice
+  // 2pi / 365
+  let perSliceAngle = (2 * Math.PI) / data.length;
+
+  let arcGenerator = d3.arc();
+
+  return data.map((d, i) => {
+    let path = arcGenerator({
+      startAngle: i * perSliceAngle,
+      endAngle: (i+1) * perSliceAngle,
+      innerRadius: radiusScale(d.low),
+      outerRadius: radiusScale(d.high),
+    });
+    return {path, fill: colorScale(d.avg)}
+  })
 }
