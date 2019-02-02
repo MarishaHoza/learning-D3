@@ -11,7 +11,7 @@ class RadialChart extends Component {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { data } = nextProps;
+    const { data, range } = nextProps;
     if (!data) return {};
 
     const radiusScale = d3
@@ -21,7 +21,7 @@ class RadialChart extends Component {
 
     const colorScale = d3
       .scaleSequential()
-      .domain(d3.extent(data, d => d.avg))
+      .domain(d3.extent(data, d => d.avg).reverse())
       .interpolator(d3.interpolateRdYlBu);
 
     // get the angle for each slice
@@ -36,7 +36,14 @@ class RadialChart extends Component {
         innerRadius: radiusScale(d.low),
         outerRadius: radiusScale(d.high)
       });
-      return { path, fill: colorScale(d.avg) };
+      // slice should be colored if there's no time range
+      // or if the slice is within the time range
+      const isColored =
+        !range.length || (range[0] <= d.date && d.date <= range[1]);
+      return {
+        path,
+        fill: isColored ? colorScale(d.avg) : "#ccc"
+      };
     });
 
     const tempAnnotations = [5, 20, 40, 60, 80].map(temp => {

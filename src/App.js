@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import "./App.css";
 import BarChart from "./visualizations/BarChart";
-import Chart from "./visualizations/Chart";
 import RadialChart from "./visualizations/RadialChart";
-import Chart2 from "./visualizations/Chart2";
+import Chart from "./visualizations/Chart";
 
 class App extends Component {
   state = {
     temps: {},
-    city: "sf" // city whose temperatures to show
+    city: "sf", // city whose temperatures to show
+    range: [] // time range set by the brush
   };
 
   componentDidMount() {
@@ -27,6 +27,10 @@ class App extends Component {
 
   updateCity = e => {
     this.setState({ city: e.target.value });
+  };
+
+  updateRange = range => {
+    this.setState({ range });
   };
 
   render() {
@@ -55,10 +59,15 @@ class App extends Component {
           visualizations,<br />
           but just to show the possibility of using D3 and React*
         </p>
-        <BarChart data={data} />
+        <BarChart
+          data={data}
+          range={this.state.range}
+          updateRange={this.updateRange}
+        />
+        <RadialChart
+          data={data}
+          range={this.state.range} />
         <Chart data={data} />
-        <RadialChart data={data} />
-        <Chart2 data={data} />
 
         <p>
           (Weather data from{" "}
