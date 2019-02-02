@@ -1,25 +1,71 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import BarChart from "./visualizations/BarChart";
+import Chart from "./visualizations/Chart";
+import RadialChart from "./visualizations/RadialChart";
+import Chart2 from "./visualizations/Chart2";
 
 class App extends Component {
+  state = {
+    temps: {},
+    city: "sf" // city whose temperatures to show
+  };
+
+  componentDidMount() {
+    Promise.all([
+      fetch(`${process.env.PUBLIC_URL || ""}/sf.json`),
+      fetch(`${process.env.PUBLIC_URL || ""}/ny.json`)
+    ])
+      .then(responses => Promise.all(responses.map(resp => resp.json())))
+      .then(([sf, ny]) => {
+        sf.forEach(day => (day.date = new Date(day.date)));
+        ny.forEach(day => (day.date = new Date(day.date)));
+
+        this.setState({ temps: { sf, ny } });
+      });
+  }
+
+  updateCity = e => {
+    this.setState({ city: e.target.value });
+  };
+
   render() {
+    const data = this.state.temps[this.state.city];
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <h1>
+          2017 Temperatures for
+          <select name="city" onChange={this.updateCity}>
+            {[
+              { label: "San Francisco", value: "sf" },
+              { label: "New York", value: "ny" }
+              // {label: 'Amsterdam', value: 'am'},
+            ].map(option => {
+              return (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              );
+            })}
+          </select>
+        </h1>
+        <p>
+          *warning: these are <em>not</em> meant to be good examples of data
+          visualizations,<br />
+          but just to show the possibility of using D3 and React*
+        </p>
+        <BarChart data={data} />
+        <Chart data={data} />
+        <RadialChart data={data} />
+        <Chart2 data={data} />
+
+        <p>
+          (Weather data from{" "}
+          <a href="wunderground.com" target="_new">
+            wunderground.com
+          </a>)
+        </p>
       </div>
     );
   }
