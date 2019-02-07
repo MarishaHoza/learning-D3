@@ -10,7 +10,8 @@ class App extends Component {
   state = {
     words: {},
     source: "bible", // city whose temperatures to show
-    range: [] // time range set by the brush
+    range: [], // time range set by the brush
+    data: [],
   };
 
 
@@ -65,10 +66,23 @@ class App extends Component {
 
 
   render() {
+
+    // this.setState({
+    // data: bibleData.map(item => {frequency: item.frequency, timeM: item.timeM})
+    // })
+
     return(
       <div>
         stuff
-        <p>{bibleData.the.frequency} <br/> {gitaData.the.frequency}</p>
+
+        <ul>
+          {
+            bibleData.map((item, key) => {
+              return <li key={key}>{item.word} {item.frequency}</li>
+            })
+          }
+        </ul>
+
       </div>
     )
     // const data = this.state.words[this.state.source];
