@@ -1,0 +1,22 @@
+Display bubbles showing the relative usage of words between the NT Bible and the
+Bhagivad Gita.
+
+The bubble size should be comparatively mapped between the highest
+count word and 0, and should be based on the combined use number.
+
+The bubble position - X should be gravity toward the center line
+
+The bubble position - Y should be scaled on the ratio of use in one book compared
+to the other.
+
+The bubble fill should show the relative use of the word in each book, 2 colors
+
+Ideally, I would like to add the following features:
+
+Priority 1: user is able to type in a new word, which will be added to the Display
+the word should fall in to place and size. If the word was not used in either,
+show a basic grey color, tiny bubble, and position randomly.
+
+Priority 2: select a bubble and the bottom part of the page will display all uses
+of the word, paginated with an option to view all or just from 1 book
+This would likely require API integration, which I have not implemented yet.
