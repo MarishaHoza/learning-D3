@@ -31,6 +31,10 @@ class BubbleChart extends Component {
     if (!data) return {};
 
 
+
+    // map min and max weighted frequency values
+    const [min, max] = d3.extent(data, items => items.weighted);
+
   }
 
 
