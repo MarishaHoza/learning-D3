@@ -12009,7 +12009,7 @@
    "word": "*now",
    "frequency": 1,
    "weighted": 1,
-   "start": true
+   "start": false
  },
  {
    "word": "daytime",
@@ -12663,7 +12663,7 @@
    "word": "**",
    "frequency": 1,
    "weighted": 1,
-   "start": true
+   "start": false
  },
  {
    "word": "sanak",

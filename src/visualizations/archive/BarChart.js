@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
+import bibleData from '../data/bibleData.json'
+import gitaData from '../data/gitaData.json'
+
 
 const width = 650;
 const height = 400;
