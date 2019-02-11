@@ -25,43 +25,25 @@ const StartData = props => (
   })
 )
 
+const myData = newData.filter((item, index, array) => {
+      return item.start === true;
+})
+
 
 
 
 
 class App extends Component {
   state = {
-    words: {},
+    words: myData,
     book: "bible", // city whose temperatures to show
   };
 
-componentDidMount() {
-  Promise.all([
-    fetch(`${process.env.PUBLIC_URL || ""}/rawData.json`)
-  ])
-  .then(responses => Promise.all(responses.map(resp => resp.json())))
-  .then(([rawData]) => {
-
-    this.setState({words: rawData
-      .filter(function(items) {
-      return items.start === true;
-      })
-    })
-  })
-
-}
-
   render() {
-    const data = this.state.words;
-
-
-    console.log(data)
-
-
 
     return(
       <div className="App">
-        <BubbleChart data={data}/>
+        <BubbleChart data={this.state.words}/>
 
         <ul>
         <StartData/>
